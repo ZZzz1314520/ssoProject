@@ -12,4 +12,10 @@ public class ThymeleafController {
         map.addAttribute("name","haozz");
         return "index";
     }
+
+    @RequestMapping("/login")
+    public String login(ModelMap map){
+        map.addAttribute("name","haozz");
+        return "login";
+    }
 }
