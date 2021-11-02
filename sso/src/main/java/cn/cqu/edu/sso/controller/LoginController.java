@@ -19,7 +19,7 @@ public class LoginController {
     public String hello() {
         return "Hello World!";
     }
-
+    //用户登录获取令牌
     @RequestMapping(value = "/user/login", method = RequestMethod.POST)
     public JSONObject login(@RequestParam(value = "admin", required = true) String admin,
             @RequestParam(value = "password", required = true) String password) {
@@ -27,9 +27,9 @@ public class LoginController {
         LoginService loginService = new LoginService();
         return loginService.loginPasswordCheck(user);
     }
-
-    @RequestMapping(value = "/user/test", method = RequestMethod.POST)
-    public boolean test(String token, String name, String pwd) {
+    //检验令牌
+    @RequestMapping(value = "/user/checkToken", method = RequestMethod.POST)
+    public boolean checkToken(String token, String name, String pwd) {
         LoginService loginService = new LoginService();
         return loginService.tokenCheck(token, name, pwd);
     }

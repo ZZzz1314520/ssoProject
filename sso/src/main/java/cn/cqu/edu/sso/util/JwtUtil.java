@@ -63,7 +63,7 @@ public class JwtUtil {
             return dateStr;
         }
     }
-
+    //检验令牌是否可用
     public static boolean verifyToken(String token, User user) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(SING);
