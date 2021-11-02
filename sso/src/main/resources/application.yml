@@ -1,2 +1,11 @@
 server:
   port: 8080
+spring:
+   data:
+      mongodb:
+         authentication-database: admin
+         database: demo
+         username: zhuozhao
+         password: "20001212" #注意这⾥要⽤引号把密码括起来
+         host: 1.14.106.156
+         port: 27017
