@@ -8,11 +8,11 @@
 
 <body>
     <strong>单点登录系统</strong>
-    <form action="login.html" method="post">
+    <form action="@{/login}" method="post">
         <input type="hidden" name="pageNumber">
-        用户名：<input type="text" name="username">
+        用户名：<input type="text" th:field="*{username}" />
         <br />
-        密码：<input type="password" name="pwd">
+        密码：<input type="password" th:field="*{pwd}" />
         <br />
         <button type="submit">提交</button> <button type="reset">重置</button>
     </form>
