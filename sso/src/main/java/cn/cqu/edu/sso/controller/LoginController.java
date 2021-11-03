@@ -26,6 +26,7 @@ public class LoginController {
     // 检验令牌
     @RequestMapping(value = "/user/checkToken", method = RequestMethod.POST)
     public boolean checkToken(String token, String name, String pwd) {
+        System.out.println("校验");
         LoginService loginService = new LoginService();
         return loginService.tokenCheck(token, name, pwd);
     }
