@@ -1,20 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8">
-    <title>单点登录系统</title>
+    <meta http-equiv="Content-Type" content="text/html charset=UTF-8" />
+    <title>单点登录系统登录页</title>
 </head>
 
 <body>
     <strong>单点登录系统</strong>
-    <form action="@{/login}" method="post">
-        <input type="hidden" name="pageNumber">
-        用户名：<input type="text" th:field="*{username}" />
+    <form action="#" th:action="@{/login}" th:object="${formdata}" method="post">
+        用户名：<input type="text" th:field="*{username}">
         <br />
-        密码：<input type="password" th:field="*{pwd}" />
+        密码：<input type="password" th:field="*{password}">
         <br />
-        <button type="submit">提交</button> <button type="reset">重置</button>
+        <button type="submit">登录</button> <button type="reset">重置</button>
     </form>
 </body>
 
