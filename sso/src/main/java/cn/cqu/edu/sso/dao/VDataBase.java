@@ -14,6 +14,8 @@ public class VDataBase {
     }
 
     public boolean checkUser(User u) {
+        System.out.println("checkName:"+u.getName());
+        // System.out.println(u.getPwd().equals(userList.get(u.getName())));
         if (userList.containsKey(u.getName()) && u.getPwd().equals(userList.get(u.getName()))) {
             return true;
         }
@@ -21,6 +23,7 @@ public class VDataBase {
     }
 
     public static void main(String[] args) throws Exception {
-
+        VDataBase v = new VDataBase();
+        System.out.println(v.userList.containsKey("jieGe"));
     }
 }
