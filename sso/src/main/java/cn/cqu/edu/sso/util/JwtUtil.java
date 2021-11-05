@@ -16,6 +16,7 @@ import cn.cqu.edu.sso.domain.User;
 public class JwtUtil {
     // 签名随意写，但复杂性越高，安全性越高
     public static final String SING = "WULIAO2016LEMON_XIZZ";
+
     /**
      * 生成token
      */
@@ -60,10 +61,11 @@ public class JwtUtil {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            return dateStr;
         }
+        return dateStr;
     }
-    //检验令牌是否可用
+
+    // 检验令牌是否可用
     public static boolean verifyToken(String token, User user) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(SING);

@@ -2,7 +2,6 @@ package cn.cqu.edu.sso.dao;
 
 import cn.cqu.edu.sso.domain.User;
 import java.util.HashMap;
-import java.util.List;
 
 //虚拟数据库
 public class VDataBase {
