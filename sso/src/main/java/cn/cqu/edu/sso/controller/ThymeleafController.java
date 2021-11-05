@@ -2,7 +2,7 @@ package cn.cqu.edu.sso.controller;
 
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletResponse;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,16 +10,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import cn.cqu.edu.sso.service.RequestLogin;
+import cn.cqu.edu.sso.util.CookieUtils;
 import cn.cqu.edu.sso.util.FormData;
 
 @Controller
 public class ThymeleafController {
 
     @GetMapping("/index")
-    public String index(Model model, HttpServletRequest request, HttpSession session) {
-        session = request.getSession();
-        System.out.println(session.getAttribute("name"));
-        model.addAttribute("name", session.getAttribute("name"));
+    public String index(Model model, HttpServletRequest request) {
+        model.addAttribute("name", CookieUtils.getCookieValue(request, "USER_NAME"));
         return "index";
     }
 
@@ -31,7 +30,7 @@ public class ThymeleafController {
 
     @PostMapping("/login")
     public String loginSubmit(@ModelAttribute("formdata") FormData formdata, Map<String, Object> map,
-            HttpSession session) throws Exception {
+            HttpServletRequest request, HttpServletResponse response) throws Exception {
         JSONObject nameAndPwd = new JSONObject();
         nameAndPwd.put("name", formdata.getUsername());
         nameAndPwd.put("pwd", formdata.getPassword());
@@ -43,9 +42,10 @@ public class ThymeleafController {
             map.put("msg", "用户名或密码错误");
             return "login";
         } else {
-            session.setAttribute("token", tk.get("token"));
-            session.setAttribute("name", formdata.getUsername());
-            session.setAttribute("pwd", formdata.getPassword());
+
+            CookieUtils.setCookie(request, response, "USER_TOKEN", (String) tk.get("token"));
+            CookieUtils.setCookie(request, response, "USER_NAME", formdata.getUsername());
+            CookieUtils.setCookie(request, response, "USER_PASSWORD", formdata.getPassword());
             map.put("msg", "登录成功");
             return "redirect:/index";
         }
@@ -53,10 +53,10 @@ public class ThymeleafController {
 
     @GetMapping("/index/A")
     public String sysA(Model model, HttpServletRequest request) throws Exception {
-        HttpSession session = request.getSession();
-        String tk = (String) session.getAttribute("token");
-        String name = (String) session.getAttribute("name");
-        String pwd = (String) session.getAttribute("pwd");
+        String tk = CookieUtils.getCookieValue(request, "USER_TOKEN");
+        String name = CookieUtils.getCookieValue(request, "USER_NAME");
+        String pwd = CookieUtils.getCookieValue(request, "USER_PASSWORD");
+        System.out.println("NAME: " + name);
         JSONObject usr = new JSONObject();
         usr.put("name", name);
         usr.put("pwd", pwd);
@@ -68,16 +68,16 @@ public class ThymeleafController {
             return "redirect:http://" + request.getServerName() + ":8081/systema";
         else {
             model.addAttribute("formdata", new FormData());
-            return "login";
+            return "redirect:/login";
         }
     }
 
     @GetMapping("/index/B")
     public String sysB(Model model, HttpServletRequest request) throws Exception {
-        HttpSession session = request.getSession();
-        String tk = (String) session.getAttribute("token");
-        String name = (String) session.getAttribute("name");
-        String pwd = (String) session.getAttribute("pwd");
+        String tk = CookieUtils.getCookieValue(request, "USER_TOKEN");
+        String name = CookieUtils.getCookieValue(request, "USER_NAME");
+        String pwd = CookieUtils.getCookieValue(request, "USER_PASSWORD");
+        System.out.println("NAME: " + name);
         JSONObject usr = new JSONObject();
         usr.put("name", name);
         usr.put("pwd", pwd);
@@ -89,7 +89,7 @@ public class ThymeleafController {
             return "redirect:http://" + request.getServerName() + ":8082/systemb";
         else {
             model.addAttribute("formdata", new FormData());
-            return "login";
+            return "redirect:/login";
         }
     }
 }
