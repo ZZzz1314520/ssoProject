@@ -13,6 +13,7 @@
         <br />
         密码：<input type="password" th:field="*{password}">
         <br />
+        <span style="color:red" th:text="${msg}"></span>
         <button type="submit">登录</button> <button type="reset">重置</button>
     </form>
 </body>

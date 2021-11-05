@@ -1,8 +1,9 @@
 package cn.cqu.edu.sso.domain;
 //用户类
 public class User {
-    private String name;
-    private String pwd;
+    private String name = "";
+    private String pwd = "";
+    private String token = "";
 
     public User(String name,String pwd){
         this.name = name;
@@ -13,6 +14,12 @@ public class User {
     }
     public String getPwd(){
         return pwd;
+    }
+    public String getToken(){
+        return token;
+    }
+    public void setToken(String s) {
+        token = s;
     }
     public void setName(String s) {
         name = s;

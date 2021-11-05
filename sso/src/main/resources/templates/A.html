@@ -1,0 +1,15 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>系统A</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<body>
+    <h1>Result</h1>
+    <p th:text="'系统A欢迎你，' + ${formdata?.username}" />
+    <a href="/index">回到主页</a>
+</body>
+
+</html>
