@@ -3,6 +3,8 @@ package cn.cqu.edu.sso.controller;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,8 +25,10 @@ public class ThymeleafController {
     }
 
     @GetMapping("/login")
-    public String login(Model model) {
+    public String login(String redirect, Model model, HttpServletRequest request) {
         model.addAttribute("formdata", new FormData());
+        HttpSession session = request.getSession();
+        session.setAttribute("redirect", redirect);
         return "login";
     }
 
@@ -36,60 +40,28 @@ public class ThymeleafController {
         nameAndPwd.put("pwd", formdata.getPassword());
         JSONObject tk = RequestLogin.sendHttpPost("http://localhost:8080/user/login",
                 JSONObject.toJSONString(nameAndPwd));
-        System.out.println(formdata.getUsername());
-        System.out.println(formdata.getPassword());
         if (tk.get("token") == null) {
             map.put("msg", "用户名或密码错误");
             return "login";
         } else {
-
             CookieUtils.setCookie(request, response, "USER_TOKEN", (String) tk.get("token"));
             CookieUtils.setCookie(request, response, "USER_NAME", formdata.getUsername());
             CookieUtils.setCookie(request, response, "USER_PASSWORD", formdata.getPassword());
             map.put("msg", "登录成功");
-            return "redirect:/index";
+            HttpSession session = request.getSession();
+            String str = (String) session.getAttribute("redirect");
+            System.out.println(str);
+            return "redirect:" + (str != null ? str : "/index");
         }
     }
 
     @GetMapping("/index/A")
-    public String sysA(Model model, HttpServletRequest request) throws Exception {
-        String tk = CookieUtils.getCookieValue(request, "USER_TOKEN");
-        String name = CookieUtils.getCookieValue(request, "USER_NAME");
-        String pwd = CookieUtils.getCookieValue(request, "USER_PASSWORD");
-        System.out.println("NAME: " + name);
-        JSONObject usr = new JSONObject();
-        usr.put("name", name);
-        usr.put("pwd", pwd);
-        usr.put("token", tk);
-        JSONObject rst = RequestLogin.sendHttpPost("http://localhost:8080/user/checkToken",
-                JSONObject.toJSONString(usr));
-        System.out.println((boolean) rst.get("state") ? "登录成功A" : "未登录");
-        if ((boolean) rst.get("state"))
-            return "redirect:http://" + request.getServerName() + ":8081/systema";
-        else {
-            model.addAttribute("formdata", new FormData());
-            return "redirect:/login";
-        }
+    public String sysA(HttpServletRequest request) {
+        return "redirect:http://" + request.getServerName() + ":8081/systema";
     }
 
     @GetMapping("/index/B")
-    public String sysB(Model model, HttpServletRequest request) throws Exception {
-        String tk = CookieUtils.getCookieValue(request, "USER_TOKEN");
-        String name = CookieUtils.getCookieValue(request, "USER_NAME");
-        String pwd = CookieUtils.getCookieValue(request, "USER_PASSWORD");
-        System.out.println("NAME: " + name);
-        JSONObject usr = new JSONObject();
-        usr.put("name", name);
-        usr.put("pwd", pwd);
-        usr.put("token", tk);
-        JSONObject rst = RequestLogin.sendHttpPost("http://localhost:8080/user/checkToken",
-                JSONObject.toJSONString(usr));
-        System.out.println((boolean) rst.get("state") ? "登录成功B" : "未登录");
-        if ((boolean) rst.get("state"))
-            return "redirect:http://" + request.getServerName() + ":8082/systemb";
-        else {
-            model.addAttribute("formdata", new FormData());
-            return "redirect:/login";
-        }
+    public String sysB(HttpServletRequest request) {
+        return "redirect:http://" + request.getServerName() + ":8082/systemb";
     }
 }

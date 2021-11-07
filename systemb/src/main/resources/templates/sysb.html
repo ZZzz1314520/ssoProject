@@ -2,14 +2,14 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>系统A</title>
+    <title>系统B</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 
 <body>
-    <h1>Result</h1>
-    <p th:text="'系统A欢迎你，' + ${formdata?.username}" />
-    <a href="/index">回到主页</a>
+    <h1>系统B</h1>
+    <p th:text="${str}" />
+    <a href="/home"><button>回到主页</button></a>
 </body>
 
 </html>
